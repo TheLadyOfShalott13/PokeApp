@@ -1,47 +1,52 @@
+/**
+ * ===========importing packages==============
+ */
 import express from "express";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import morgan from "morgan";
-import mongoose from "mongoose";
+import sequelize from "./config/conn.js";
 import cookieParser from "cookie-parser";
 import cors from "cors"
 
 
+/**
+ * ===========importing routes==============
+ */
+import userRoute from "./routes/user.js";
 
+
+/**
+ * ============initializing express app, web socket and DB syncing===============
+ */
 const app = express();
+
 app.use("/uploads", express.static("uploads"));
-dotenv.config();
+dotenv.config({path:"./config/.env"});
 
-const PORT = process.env.PORT || 7700;
+//insert this as arguments to sync() in order to sync the models correctly { alter: true }
+sequelize.sync({ alter: true }).then(() => { console.log('user table created successfully!'); })
+    .catch((error) => { console.error('Unable to create table : ', error); });
 
-const connect = async () => {
-    try {
-        await mongoose.connect(process.env.MONGO);
-        console.log("Connected to mongoDB.");
-    } catch (error) {
-        throw error;
-    }
-};
+app.get('/', (req, res) => { res.send('Hello from Express!') });
 
-mongoose.connection.on("disconnected", () => {
-    console.log("mongoDB disconnected!");
-});
 
-app.get('/',
-    (req, res) => { res.send('Hello from Express!') });
-
-//middlewares
+/**
+ * ============Adding the middlewares==============
+ */
 app.use(cookieParser())
 app.use(express.json());
 app.use(helmet());
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: `${process.env.FRONTEND_URL}`,
     credentials: true
 }))
 app.use(morgan("common"));
 
 
-app.listen(PORT, () => {
-    console.log("Listening on port " + PORT);
-    connect();
-});
+/**
+ * ==============allow app to use imported routes here==============
+ */
+app.use("/api/users", userRoute);
+
+app.listen(process.env.APP_PORT, () => { console.log("Listening on port " + process.env.APP_PORT); });
