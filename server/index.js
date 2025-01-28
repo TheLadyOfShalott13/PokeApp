@@ -14,6 +14,7 @@ import cors from "cors"
  * ===========importing routes==============
  */
 import userRoute from "./routes/user.js";
+import favoritesRoute from "./routes/favorites.js";
 
 
 /**
@@ -47,6 +48,7 @@ app.use(morgan("common"));
 /**
  * ==============allow app to use imported routes here==============
  */
-app.use("/api/users", userRoute);
+app.use("/api/user", userRoute);
+app.use("/api/favorites", favoritesRoute);
 
 app.listen(process.env.APP_PORT, () => { console.log("Listening on port " + process.env.APP_PORT); });
