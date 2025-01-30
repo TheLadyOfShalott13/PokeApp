@@ -29,7 +29,7 @@ export const getAllPokemon = async (req, res, next) => {
 //================= Get One pokemon =======================//
 export const getOnePokemon = async (req, res, next) => {
     try {
-        const onePokemon = await Pokemon.findAll({ where: { id: req.params.poke_id } });
+        const onePokemon = await Pokemon.findAll({ where: { id: req.params.id } });
         res.status(200).json(onePokemon);
     } catch (err) {
         next(err)
@@ -41,7 +41,7 @@ export const getOnePokemon = async (req, res, next) => {
 export const updatePokemon = async (req, res, next) => {
     try {
         const editedPokemon = await Pokemon.update(
-            req.body, {where: {id: req.params.poke_id}}
+            req.body, {where: {id: req.params.id}}
         );
         res.status(200).json(editedPokemon);
     } catch (err) {
@@ -53,7 +53,7 @@ export const updatePokemon = async (req, res, next) => {
 //================= Delete a pokemon =======================//
 export const deletePokemon = async (req, res, next) => {
     try {
-        await Pokemon.destroy( { where: { poke_id: req.params.poke_id } });
+        await Pokemon.destroy( { where: { id: req.params.id } });
         res.status(200).json("The selected pokemon has been deleted");
     } catch (err) {
         next(err);
