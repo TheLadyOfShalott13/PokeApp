@@ -7,6 +7,7 @@ const Pokemon = sequelize.define("Pokemon",{
         identifier: { type: DataTypes.INTEGER,  allowNull: false },
         slug:       { type: DataTypes.STRING,   allowNull: false },
         image_path: { type: DataTypes.DATE,     allowNull: false },
+        poketypes:  { type: DataTypes.STRING,   allowNull: false }      //instead of a separate table, keep multiple IDs as a string separated with commas
     });
 
 export default Pokemon;
