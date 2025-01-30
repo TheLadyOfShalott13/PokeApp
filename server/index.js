@@ -20,7 +20,7 @@ import poketypeRoute from "./routes/poketype.js";
 
 
 /**
- * ============initializing express app, web socket and DB syncing===============
+ * ============initializing express app DB syncing===============
  */
 const app = express();
 
