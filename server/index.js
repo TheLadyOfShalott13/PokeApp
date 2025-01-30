@@ -16,6 +16,7 @@ import cors from "cors"
 import userRoute from "./routes/user.js";
 import favoritesRoute from "./routes/favorites.js";
 import pokemonRoute from "./routes/pokemon.js";
+import poketypeRoute from "./routes/poketype.js";
 
 
 /**
@@ -52,5 +53,6 @@ app.use(morgan("common"));
 app.use("/api/user", userRoute);
 app.use("/api/favorites", favoritesRoute);
 app.use("/api/pokemon", pokemonRoute);
+app.use("/api/poketype", poketypeRoute);
 
 app.listen(process.env.APP_PORT, () => { console.log("Listening on port " + process.env.APP_PORT); });
