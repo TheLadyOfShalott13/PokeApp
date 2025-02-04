@@ -8,7 +8,7 @@ import morgan from "morgan";
 import sequelize from "./config/conn.js";
 import cookieParser from "cookie-parser";
 import cors from "cors"
-
+import './cron.js';
 
 /**
  * ===========importing routes==============
