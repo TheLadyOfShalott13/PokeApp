@@ -60,7 +60,7 @@ export const savePokemonListFromApi = async() => {
         try {
             for (const pokemon_item of pokemon_list) {               // Loop through poketypes and insert/update if exists into database
                 let pokemon = await axios.get(pokemon_item.url, { timeout: 10000 })
-                let dataToSave = getPokemonData(pokemon);
+                let dataToSave = await getPokemonData(pokemon);
                 await Pokemon.upsert(dataToSave,{ transaction :t });
                 console.log(pokemon_item.name + ' processed successfully.');
             }
@@ -154,7 +154,7 @@ export const savePokemonEvolutions = async () => {
                 const t = await sequelize.transaction();                // Use a transaction to ensure data integrity
 
                 try {
-                    processEvolvedTo(pokemon_evolution_id, position, pokemon_evolution.chain, t)
+                    await processEvolvedTo(pokemon_evolution_id, position, pokemon_evolution.chain, t)
                     await t.commit();
                     console.log('Pokemon Evolutions saved successfully.');
                 } catch (error) {
