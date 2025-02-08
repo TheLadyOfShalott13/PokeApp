@@ -129,7 +129,7 @@ export const getPokemonData = async(pokemon) => {
 
 
 //================= Fetch Pokémon Evolution Map =======================//
-export const savePokemonEvolutions = async () => {
+export const savePokemonEvolutionsFromApi = async () => {
     try {
         //initialize the map objects then fetch the info from our database
         const pokemonEvolutionMap       = {};       //Map object:- {pokemon database id : pokemon api evolution chain id}
