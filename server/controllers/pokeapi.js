@@ -128,8 +128,8 @@ export const getPokemonData = async(pokemon) => {
 }
 
 
-//================= Function to process the pokemon evolution===============//
-const processEvolvedTo = async (evolution_chain_id, position, evolution_chain, t) => {
+//================= Function to process the pokemon evolution ===============//
+export const processEvolvedTo = async (evolution_chain_id, position, evolution_chain, pokemonIdentifierMap, t) => {
     for (const evolution of evolution_chain) {
         let dataToSave = {};
         dataToSave.pokechain_id     = evolution_chain_id;
@@ -146,7 +146,7 @@ const processEvolvedTo = async (evolution_chain_id, position, evolution_chain, t
 }
 
 
-//================= Function to iterate through Pokémon Evolution Map =======================//
+//================= CRON 3: Function to iterate through Pokémon Evolution Map =======================//
 export const savePokemonEvolutionsFromApi = async () => {
     try {
         //initialize the map objects then fetch the info from our database
@@ -173,7 +173,7 @@ export const savePokemonEvolutionsFromApi = async () => {
                 const t = await sequelize.transaction();                // Use a transaction to ensure data integrity
 
                 try {
-                    await processEvolvedTo(pokemon_evolution_id, position, pokemon_evolution.chain, t)
+                    await processEvolvedTo(pokemon_evolution_id, position, pokemon_evolution.chain, pokemonIdentifierMap, t)
                     await t.commit();
                     console.log('Pokemon Evolutions saved successfully.');
                 } catch (error) {
