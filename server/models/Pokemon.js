@@ -6,7 +6,7 @@ const Pokemon = sequelize.define("Pokemon",{
         name:           { type: DataTypes.STRING,   allowNull: false },
         identifier:     { type: DataTypes.INTEGER,  allowNull: false },
         slug:           { type: DataTypes.STRING,   allowNull: false },
-        image_path:     { type: DataTypes.DATE,     allowNull: false },
+        image_path:     { type: DataTypes.STRING,   allowNull: false },
         poketypes:      { type: DataTypes.STRING,   allowNull: false },      //instead of a separate table, keep multiple IDs as a string separated with commas
         pokechain_id:   { type: DataTypes.INTEGER,  allowNull: false },      //evolution chain id from pokeAPI
         pokespecies_id: { type: DataTypes.INTEGER,  allowNull: false },      //species id from pokeAPI
