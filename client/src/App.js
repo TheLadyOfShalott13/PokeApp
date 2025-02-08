@@ -1,24 +1,37 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { useContext } from "react";
+import { AuthContext } from "./authContext";
+
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Homepage from "./pages/Home";
+
+//Import modules
+//import action from "./pages/request/moduleName";
 
 function App() {
+
+  const { user } = useContext(AuthContext);
+
+  const ProtectedRoute = ({ children }) => {
+    if (!user) {
+      return <Login title="Login to Save Your Favorite Pokemons" />;
+    } else {
+      return children;
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <BrowserRouter>
+        <Routes>
+
+          <Route path="/"                         element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
+          <Route path="/login"                    element={<Login />} />
+          <Route path="/register"                 element={<Register />} />
+
+        </Routes>
+      </BrowserRouter>
   );
 }
 
