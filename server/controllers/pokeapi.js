@@ -128,13 +128,31 @@ export const getPokemonData = async(pokemon) => {
 }
 
 
-//================= Fetch Pokémon Evolution Map =======================//
+//================= Function to process the pokemon evolution===============//
+const processEvolvedTo = async (evolution_chain_id, position, evolution_chain, t) => {
+    for (const evolution of evolution_chain) {
+        let dataToSave = {};
+        dataToSave.pokechain_id     = evolution_chain_id;
+        dataToSave.position         = position;
+        dataToSave.pokemon_id       = pokemonIdentifierMap[evolution.species.name];
+        dataToSave.ways             = evolution.evolution_details.length;     //count the number of ways one could evolve to this state
+
+        await Pokevolution.upsert(dataToSave, { transaction: t });
+        console.log(`${evolution.species.name} processed successfully.`);
+        for (const evolution_type of evolution.evolves_to){             //evolves_to is an array object from the api and contains pokemon details
+            await processEvolvedTo(evolution_chain_id, position + 1, evolution_type, t);
+        }
+    }
+}
+
+
+//================= Function to iterate through Pokémon Evolution Map =======================//
 export const savePokemonEvolutionsFromApi = async () => {
     try {
         //initialize the map objects then fetch the info from our database
         const pokemonEvolutionMap       = {};       //Map object:- {pokemon database id : pokemon api evolution chain id}
         const pokemonIdentifierMap      = {};       //Map object:- {pokemon api identifier id : pokemon database id}
-        const pokemonEvolutionData = await Pokemon.findAll({ attributes: ['id','slug', 'pokechain_id'] });
+        const pokemonEvolutionData  = await Pokemon.findAll({ attributes: ['id','slug', 'pokechain_id'] });
 
         //setting the id and values for both maps
         pokemonEvolutionData.forEach(pokemon => {
@@ -144,26 +162,6 @@ export const savePokemonEvolutionsFromApi = async () => {
 
         const getPokemonEvolutionUrl = base_url + api_url['EVOLUTION'];     //initializing the base url of the evolution api url
         let processedEvolutionIDs = []                                      //array to record already processed evolution ids
-
-        const processEvolvedTo = async (evolution_chain_id, position, evolution_chain, t) => {
-
-            for (const evolution of evolution_chain) {
-
-                let dataToSave = {};
-                dataToSave.pokechain_id     = evolution_chain_id;
-                dataToSave.position         = position;
-                dataToSave.pokemon_id       = pokemonIdentifierMap[evolution.species.name];
-                dataToSave.ways             = evolution.evolution_details.length;     //count the number of ways one could evolve to this state
-
-                await Pokevolution.upsert(dataToSave, { transaction: t });
-                console.log(`${evolution.species.name} processed successfully.`);
-                for (const evolution_type of evolution.evolves_to){             //evolves_to is an array object from the api and contains pokemon details
-                    await processEvolvedTo(evolution_chain_id, position + 1, evolution_type, t);
-                }
-
-            }
-
-        }
 
         for (const pokemon_db_id in pokemonEvolutionMap) {                         //looping through the evolution ID map
             const pokemon_evolution_id = pokemonEvolutionMap[pokemon_db_id];
