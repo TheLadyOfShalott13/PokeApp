@@ -1,0 +1,128 @@
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+.navContainer {
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: black;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    padding: 0px 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+}
+
+
+.navLogo {
+    color: white;
+    font-family: "Rubik Doodle Shadow", system-ui;
+    font-weight: 900;
+    font-size: 1.5rem;
+    font-style: italic;
+}
+
+.navbar ul {
+    list-style: none;
+}
+
+.navbar ul li {
+    position: relative;
+    float: left;
+}
+
+.profilePicture {
+    height: 40px;
+    width: 40px;
+}
+
+.profilePicture img {
+    margin-top: 10px;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+#usernamename {
+    display: none;
+}
+
+.navbar ul li p {
+    font-size: 1rem;
+    padding: 20px;
+    color: white;
+    display: block;
+    transition: all 1s;
+}
+
+.navbar ul li p:hover {
+    transform: translateY(-1px);
+    border-bottom: solid 2px white;
+}
+
+#menu-bar {
+    display: none;
+}
+
+.navContainer label {
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+    display: none;
+}
+
+@media (max-width:800px) {
+    .navContainer {
+        height: 70px;
+    }
+
+    .navContainer label {
+        display: initial;
+    }
+
+    .navContainer .navbar {
+        position: fixed;
+        top: 70px;
+        left: -100%;
+        text-align: center;
+        background: white;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        display: block;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    .profilePicture {
+        display: none;
+    }
+
+    #usernamename {
+        font-weight: bolder;
+        display: block;
+    }
+
+    .navbar ul li p {
+        color: black;
+    }
+
+    .navbar ul li p:hover {
+        transform: translateY(-1px);
+
+        border-bottom: none;
+    }
+
+    .navbar ul li {
+        width: 100%;
+    }
+
+    #menu-bar:checked~.navbar {
+        left: 0;
+    }
+}

@@ -1,0 +1,157 @@
+body,
+html {
+    overflow-x: hidden;
+}
+
+.imageName {
+    font-size: 12px;
+}
+
+.newFormContainer {
+    background-color: lavender;
+    height: 100%;
+}
+
+.cpContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    padding: 50px;
+}
+
+.formContainer {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 100px 0;
+    flex-wrap: wrap;
+}
+
+.inputContainer {
+    border-top: 1px solid gray;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    margin: 20px 0;
+}
+
+.inputContainer button {
+    width: 100px;
+}
+
+
+
+.star-rating-slider {
+    margin: 5px 0 15px 0;
+}
+
+.star-rating-slider .star-icon {
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+}
+
+
+.createRestContainer .column .input .formInput {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    gap: 10px;
+}
+
+.input label {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.inputContainer button {
+    width: 200px;
+    height: 40px;
+    margin-top: 20px;
+    border: none;
+    background: purple;
+    border-radius: 25px;
+    font-size: 18px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+}
+
+.input input {
+    font-size: 1rem;
+    height: 40px;
+    width: 100%;
+    margin-top: 10px;
+    font-size: 1rem;
+    padding: 5px 5px 5px 15px;
+    outline: 0;
+    border: 0;
+    border-bottom: 1px solid plum;
+    background: white;
+    color: purple;
+}
+
+.newFormContainer .column .input .type {
+    text-align: center;
+    height: 35px;
+    background: white;
+    border-radius: 5px;
+    color: violet;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.newFormContainer select {
+    height: 50px;
+    font-size: medium;
+    font-family: "Manrope", sans-serif;
+}
+
+.newFormContainer option {
+    font-size: medium;
+    font-family: "Manrope", sans-serif;
+}
+
+@media screen and (max-width: 800px) {
+    .inputContainer {
+        width: 80%;
+    }
+
+    .picsContainer {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+
+
+    .formContainer {
+        width: 90%;
+    }
+
+    .inputContainer {
+        width: 100%;
+    }
+
+    .newFormContainer.column {
+        width: 100%;
+        margin-top: 50px;
+
+    }
+
+}
