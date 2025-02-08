@@ -8,7 +8,7 @@ import morgan from "morgan";
 import sequelize from "./config/conn.js";
 import cookieParser from "cookie-parser";
 import cors from "cors"
-import './cron.js';
+//import './cron.js';
 
 /**
  * ===========importing routes==============
@@ -28,8 +28,9 @@ const app = express();
 app.use("/uploads", express.static("uploads"));
 dotenv.config({path:"./config/.env"});
 
-//insert this as arguments to sync() in order to sync the models correctly { alter: true }
-sequelize.sync({ alter: true }).then(() => { console.log('user table created successfully!'); })
+sequelize.sync(
+//    { alter: true }   //uncomment when syncing model changes
+).then(() => { console.log('user table created successfully!'); })
     .catch((error) => { console.error('Unable to create table : ', error); });
 
 app.get('/', (req, res) => { res.send('Hello from Express!') });
