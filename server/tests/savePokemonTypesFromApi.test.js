@@ -1,10 +1,10 @@
 //=============Set up all test tools================//
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const axios = require('axios');
-const MockAdapter = require('axios-mock-adapter');
-const sequelize = require('../config/conn.js');
+import * as chai from "chai";
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
+import sequelize from '../config/conn.js';
 
 //============import object and functions to be tested and assertion objects===========//
 import {savePokemonTypesFromApi} from '../controllers/pokeapi.js';
