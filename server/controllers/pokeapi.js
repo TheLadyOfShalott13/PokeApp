@@ -7,14 +7,14 @@ import sequelize from "../config/conn.js";
 const base_url = 'https://pokeapi.co/api/v2';
 const api_url = {
     'LIST' : '/pokemon',
-    'SINGLE' : '/pokemon/{id}',
+    'SINGLE' : '/pokemon/',
     'SPECIES' : '/pokemon-species',
     'EVOLUTION' : '/evolution-chain/',
     'TYPES': '/type',
 };
 
 
-//================= Get a list of pokemon types =======================//
+//================= CRON 1: Get a list of pokemon types =======================//
 export const savePokemonTypesFromApi = async() => {
     try {
         const type = 'TYPES'
@@ -47,21 +47,42 @@ export const savePokemonTypesFromApi = async() => {
 }
 
 
-//================= Get a list of pokemon and save them to the database =======================//
+//================= CRON 2: Get a list of pokemon and save them to the database =======================//
+
+export const fetchPokemonInfo = async (pokemon) => {
+    const type = 'SINGLE'
+    const getPokemonInfoUrl = base_url + api_url[type] + pokemon
+    const response = await axios.get(getPokemonInfoUrl, { timeout: 10000 });
+    return response.data;
+};
+
+export const fetchPokemonList = async (limit) => {
+    const type = 'LIST'
+    const getPokemonListUrl = base_url + api_url[type] + '?limit=' + limit
+    const response = await axios.get(getPokemonListUrl, { timeout: 10000 });
+    return response.data.results;
+};
+
+export const fetchPokemonSpeciesInfo = async (pokemon_species_url) => {
+    const response = await axios.get(pokemon_species_url, { timeout: 10000 });
+    return response.data;
+};
+
+export const savePokemonData = async (data, transaction) => {
+    await Pokemon.upsert(data, { transaction });
+};
+
+
 export const savePokemonListFromApi = async() => {
     try {
-        const type = 'LIST'
-        const limit = '?limit=150'
-        const getPokemonListUrl = base_url + api_url[type] + limit
-        const response = await axios.get(getPokemonListUrl, { timeout: 10000 })
-        const pokemon_list = response.data.results;
+        const limit = 150
+        const pokemon_list = await fetchPokemonList(limit);          //fetch list of pokemon
 
-        const t = await sequelize.transaction();        // Use a transaction to ensure data integrity
+        const t = await sequelize.transaction();                     // Use a transaction to ensure data integrity
         try {
-            for (const pokemon_item of pokemon_list) {               // Loop through poketypes and insert/update if exists into database
-                let pokemon = await axios.get(pokemon_item.url, { timeout: 10000 })
-                let dataToSave = await getPokemonData(pokemon);
-                await Pokemon.upsert(dataToSave,{ transaction :t });
+            for (const pokemon_item of pokemon_list) {                     // Loop through poketypes and insert/update if exists into database
+                let dataToSave = await getPokemonData(pokemon_item.name);  // Fetch each pokemon's data
+                await savePokemonData(dataToSave,t)
                 console.log(pokemon_item.name + ' processed successfully.');
             }
             await t.commit();
@@ -84,8 +105,8 @@ export const savePokemonListFromApi = async() => {
 export const getPokemonData = async(pokemon) => {
     const getPokemonTypesUrl = base_url + api_url['TYPES'];
     const getPokemonSpeciesUrl = base_url + api_url['SPECIES'];
-    const pokeInfo = await axios.get(pokemon.url, { timeout: 10000 })
-    const pokeSpecies = await axios.get(pokeInfo.species.url, { timeout: 10000 })
+    const pokeInfo = await fetchPokemonInfo(pokemon)
+    const pokeSpecies = await fetchPokemonSpeciesInfo(pokeInfo.species.url)
     let data = {}
 
     data.name           = pokeInfo.name;
