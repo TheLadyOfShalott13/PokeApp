@@ -4,23 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import '../styles/slider-accordion.css';
 
-const data = [
-    {
-        name: 'Pikachu',
-        image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/172.png' // Replace with actual paths
-    },
-    {
-        name: 'Charmander',
-        image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png'
-    },
-    {
-        name: 'Squirtle',
-        image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/26.png'
-    },
-    // Add more items as needed
-];
-
-const SliderAccordion = () => {
+const SliderAccordion = ({data}) => {
     const settings = {
         //dots: true,
         infinite: true,
@@ -35,7 +19,7 @@ const SliderAccordion = () => {
             <Slider {...settings}>
                 {data.map((item, index) => (
                     <div key={index} className="card">
-                        <img src={item.image} alt={item.name} />
+                        <img src={item.image_path} alt={item.name} />
                         <h3>{item.name}</h3>
                     </div>
                 ))}
