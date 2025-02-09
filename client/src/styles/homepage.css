@@ -1,0 +1,21 @@
+.Homepage {
+    background-image: url('../../public/comic-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+.table-container  {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    border-radius: 10px;
+    padding-top: 20px;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    display: block;
+}

@@ -1,0 +1,31 @@
+@font-face {
+    font-family: 'PokefontSolid';
+    src: url("../fonts/Pokemon-Solid.ttf") format('truetype');
+}
+
+.slider-accordion{
+    padding-top: 10px;
+}
+
+.card {
+    font-family: 'PokefontSolid', sans-serif;
+    display: block;
+    width: 500px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.card h3 {
+    margin-top: 10px;
+    font-size: 48px;
+    letter-spacing: 6px;
+    color: black;
+}
+
+.card img{
+    height: 400px;
+    display: inline-block;
+}
