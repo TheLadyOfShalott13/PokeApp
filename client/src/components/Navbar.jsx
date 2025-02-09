@@ -1,5 +1,5 @@
 import '../styles/navbar.css'
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from "react-router-dom"
@@ -19,7 +19,7 @@ const Navbar = () => {
     return (
         <div className='navContainer'>
             <Link to="/">
-                <p className='navLogo'>Gifts Manager</p>
+                <p className='navLogo'>P<img src={`${process.env.REACT_APP_FRONTEND_URL}/pokeball.png`} alt="Pokemon Logo" height={20} className='pokeball' />KEAPP</p>
             </Link>
 
             <input type="checkbox" id='menu-bar' />
