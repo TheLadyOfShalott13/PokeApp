@@ -16,7 +16,7 @@ html {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 400px;
-    background-color: #dddddd;
+    background-color: rgba(255,255,255,0.8);
     border-radius: 10px;
     padding-top: 20px;
 }
@@ -48,13 +48,22 @@ form .txt_field {
     outline: none;
 }
 
+.login {
+    background-image: url('../../public/pikachu-wallpaper.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
+}
+
 .login .txt_field input {
     width: 100%;
     padding: 0 7px;
     height: 40px;
     font-size: 16px;
     border: none;
-    background: none;
+    background: 'none';
     outline: none;
     color: #545454;
 }
@@ -105,4 +114,10 @@ form .txt_field {
     .loginCard .center {
         width: 300px;
     }
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
