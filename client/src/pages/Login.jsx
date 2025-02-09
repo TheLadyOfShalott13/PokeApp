@@ -51,7 +51,9 @@ function Login() {
             <Navbar />
             <div className="loginCard">
                 <div className="center">
-                    <h1>Welcome Back! ;-)</h1>
+                    <div className="image-container">
+                        <img src={`${process.env.REACT_APP_FRONTEND_URL}/pokemon-logo.png`} alt="Pokemon Logo" height={200} />
+                    </div>
                     <form>
                         <div className="txt_field">
                             <input 
