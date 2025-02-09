@@ -7,10 +7,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Register() {
+    const api_url = process.env.REACT_APP_BACKEND_URL
+    const redirect_url = process.env.REACT_APP_FRONTEND_URL
     const navigate = useNavigate();
-
     const [info, setInfo] = useState({});
-
     const handleChange = (e) => {
         setInfo(
             (prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -21,10 +21,10 @@ function Register() {
 
         try {
             await axios.post(
-                "/users/register",
+                `${api_url}/api/user/register`,
                 info, { withcredentials: false })
 
-            navigate("/login");
+            navigate(`/login`);
         } catch (err) {
             console.log(err)
         }
@@ -36,17 +36,17 @@ function Register() {
             <div className="registerCard">
                 <div className="center">
                     <div className="image-container">
-                        <img src={`${process.env.REACT_APP_FRONTEND_URL}/pokemon-logo.png`} alt="Pokemon Logo" height={200} />
+                        <img src={`${redirect_url}/pokemon-logo.png`} alt="Pokemon Logo" height={200} />
                     </div>
                     <form>
                         <div className="formInput">
                             <div className="txt_field">
                                 <input
                                     type="text"
-                                    placeholder="Username"
-                                    name="username"
+                                    placeholder="Name"
+                                    name="name"
                                     onChange={handleChange}
-                                    id="username"
+                                    id="name"
                                     required />
                             </div>
                             <div className="txt_field">
