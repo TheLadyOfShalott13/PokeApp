@@ -14,20 +14,19 @@ function Login() {
 
     const { dispatch } = useContext(AuthContext);
     const navigate = useNavigate();
-
     const handleChange = (e) => {
         setCredentials(
             (prev) => ({ ...prev, [e.target.id]: e.target.value }));
     };
-
-    const api_url = `http://${process.env.REACT_APP_SERVER_URL}:${process.env.REACT_APP_API_PORT}`
+    const api_url = process.env.REACT_APP_BACKEND_URL
+    const redirect_url = process.env.REACT_APP_FRONTEND_URL
     const handleClick = async (e) => {
         e.preventDefault();
         dispatch({ type: "LOGIN_START" });
         try {
             const res =
                 await axios.post(
-                    `${api_url}/api/users/login`,
+                    `${api_url}/api/user/login`,
                     credentials);
             dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
             navigate('/');
@@ -58,8 +57,8 @@ function Login() {
                         <div className="txt_field">
                             <input 
                                 type="text"
-                                placeholder="Username"
-                                id="username"
+                                placeholder="Email"
+                                id="email"
                                 onChange={handleChange}
                                 className="lInput"/>
                         </div>
