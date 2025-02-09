@@ -35,7 +35,9 @@ function Register() {
             <Navbar />
             <div className="registerCard">
                 <div className="center">
-                    <h1>Join Us Now! :-)</h1>
+                    <div className="image-container">
+                        <img src={`${process.env.REACT_APP_FRONTEND_URL}/pokemon-logo.png`} alt="Pokemon Logo" height={200} />
+                    </div>
                     <form>
                         <div className="formInput">
                             <div className="txt_field">

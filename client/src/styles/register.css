@@ -17,7 +17,7 @@ html {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 400px;
-    background-color: #dddddd;
+    background-color: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
 }
 
@@ -51,6 +51,15 @@ form .txt_field_img {
     border: none;
     background: none;
     outline: none;
+}
+
+.register {
+    background-image: url('../../public/psyduck-wallpaper.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
 }
 
 .register .txt_field input {
