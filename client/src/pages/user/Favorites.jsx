@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import "../../styles/favorites.css";
-import Navbar from '../../components/Navbar'
-import SliderAccordian from "../../components/SliderAccordian";
+import NavigationBar from '../../components/NavigationBar'
 import axios from "axios";
 
 const Favorites = () => {
@@ -32,10 +31,10 @@ const Favorites = () => {
 
     return (
         <div>
-            <Navbar />
+            <NavigationBar />
             <div className="Favorites">
                 <div className="table-container">
-                    {	responseRecieved ? data.length>0 ? <SliderAccordian data={data} setData={setData} />  : <h1 className="feedback-header">Cannot Find Image</h1> : <h1 className="feedback-header">Loading Image</h1> }
+
                 </div>
             </div>
         </div>

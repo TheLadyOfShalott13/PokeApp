@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import "../styles/homepage.css";
-import Navbar from '../components/Navbar'
+import "../styles/forms.css";
+import NavigationBar from '../components/NavigationBar'
 import axios from "axios";
 
 const Homepage = () => {
@@ -31,13 +32,23 @@ const Homepage = () => {
 
     return (
         <div>
-            <Navbar />
+            <NavigationBar />
             <div className="Homepage">
                 <div className="table-container">
+                    <div>
+                        <div className="txt_field">
+                            <input
+                                type="text"
+                                placeholder="Email"
+                                id="email"
+                                className="lInput"/>
+                        </div>
+                    </div>
                     <div className="grid-container">
                         {data.map((item, index) => (
                             <div key={index} className="grid-item">
-                                <img src={item.image_path} alt={item.name} /> {item.name}
+                                <img src={item.image_path} alt={item.name} height={250}/>
+                                <h2 className="pokemon-font-solid">{item.name}</h2>
                             </div>
                         ))}
                     </div>

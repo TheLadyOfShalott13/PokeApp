@@ -21,7 +21,7 @@ code {
   align-items: center;
   justify-content: center;
   align-content: center;
-  display: block;
+  display: grid;
   width: 100%;
   padding-left: 15px;
   padding-right: 15px;
@@ -31,8 +31,11 @@ code {
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);  /* 3 columns */
-  gap: 10px;  /* Space between grid items */
+  grid-template-columns: repeat(3, 0fr);
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
 }
 
 .grid-item {
@@ -40,4 +43,23 @@ code {
   padding: 20px;
   text-align: center;
   border: 1px solid #ddd;
+}
+
+@font-face {
+  font-family: 'PokemonFontOutline';
+  src: url('./fonts/Pokemon-Hollow.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'PokemonFontSolid';
+  src: url('./fonts/Pokemon-Solid.ttf') format('truetype');
+}
+
+.pokemon-font-outline {
+  font-family: 'PokemonFontOutline', sans-serif;
+}
+
+.pokemon-font-solid {
+  font-family: 'PokemonFontSolid', sans-serif;
+  letter-spacing: 4px;
 }

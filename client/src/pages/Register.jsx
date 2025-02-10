@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import NavigationBar from "../components/NavigationBar";
 import "../styles/register.css";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -32,7 +32,7 @@ function Register() {
     };
     return (
         <div className="register">
-            <Navbar />
+            <NavigationBar />
             <div className="registerCard">
                 <div className="center">
                     <div className="image-container">

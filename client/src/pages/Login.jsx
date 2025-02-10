@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import NavigationBar from "../components/NavigationBar";
 import "../styles/login.css";
 import axios from "axios";
 import { useContext, useState } from "react";
@@ -47,7 +47,7 @@ function Login() {
 
     return (
         <div className="login">
-            <Navbar />
+            <NavigationBar />
             <div className="loginCard">
                 <div className="center">
                     <div className="image-container">
