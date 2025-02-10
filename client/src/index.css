@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding-top: 50px;
 }
 
 code {
@@ -62,4 +63,16 @@ code {
 .pokemon-font-solid {
   font-family: 'PokemonFontSolid', sans-serif;
   letter-spacing: 4px;
+}
+
+.main-body {
+  padding: 50px;
+}
+
+.card-image {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.card-center {
+  text-align: center;
 }
