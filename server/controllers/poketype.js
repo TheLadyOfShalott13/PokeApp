@@ -1,5 +1,24 @@
 import Poketype from "../models/Poketype.js";
-
+const colours = {
+    normal: '#A8A77A',
+    fire: '#EE8130',
+    water: '#6390F0',
+    electric: '#F7D02C',
+    grass: '#7AC74C',
+    ice: '#96D9D6',
+    fighting: '#C22E28',
+    poison: '#A33EA1',
+    ground: '#E2BF65',
+    flying: '#A98FF3',
+    psychic: '#F95587',
+    bug: '#A6B91A',
+    rock: '#B6A136',
+    ghost: '#735797',
+    dragon: '#6F35FC',
+    dark: '#705746',
+    steel: '#B7B7CE',
+    fairy: '#D685AD',
+};
 
 //================= Add a poketype type =======================//
 export const addPoketype = async (req, res, next) => {
@@ -19,7 +38,11 @@ export const addPoketype = async (req, res, next) => {
 export const getAllPoketypes = async (req, res, next) => {
     try {
         const poketypeList = await Poketype.findAll();
-        res.status(200).json(poketypeList);
+        const modifiedPoketypeList = poketypeList.map((type) => {
+            return { ...type.get({plain: true}), colour: colours[type.name] };
+        });
+
+        res.status(200).json(modifiedPoketypeList);
     } catch (err) {
         next(err)
     }
@@ -30,7 +53,10 @@ export const getAllPoketypes = async (req, res, next) => {
 export const getOnePoketype = async (req, res, next) => {
     try {
         const onePoketype = await Poketype.findAll({ where: { id: req.params.id } });
-        res.status(200).json(onePoketype);
+        const modifiedonePoketype = onePoketype.map((type) => {
+            return { ...type.get({plain: true}), colour: colours[type.name] };
+        });
+        res.status(200).json(modifiedonePoketype);
     } catch (err) {
         next(err)
     }
