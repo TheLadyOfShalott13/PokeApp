@@ -10,12 +10,14 @@
 .card {
     font-family: 'PokefontSolid', sans-serif;
     display: block;
-    width: 500px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     border-radius: 10px;
+    padding: 10px;
+    transition: transform 0.3s;
+    height: 300px;
 }
 
 .card h3 {
@@ -26,6 +28,11 @@
 }
 
 .card img{
-    height: 400px;
+    max-height: 150px;
     display: inline-block;
 }
+
+.highlight {
+    transform: scale(2);
+}
+

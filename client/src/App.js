@@ -6,6 +6,7 @@ import { AuthContext } from "./authContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Homepage from "./pages/Home";
+import Favorites from "./pages/user/Favorites";
 
 //Import modules
 //import action from "./pages/request/moduleName";
@@ -26,9 +27,10 @@ function App() {
       <BrowserRouter>
         <Routes>
 
-          <Route path="/"                         element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
-          <Route path="/login"                    element={<Login />} />
-          <Route path="/register"                 element={<Register />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/" element={<Homepage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
         </Routes>
       </BrowserRouter>

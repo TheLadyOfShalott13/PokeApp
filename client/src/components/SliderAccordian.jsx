@@ -1,26 +1,37 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import Slider from 'react-slick';
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import '../styles/slider-accordion.css';
 
 const SliderAccordion = ({data}) => {
+    const slidesToShow = 3;
+    const [currentSlide, setCurrentSlide] = useState(1);
     const settings = {
-        //dots: true,
+        dots: true,
         infinite: true,
         speed: 500,
-        slidesToShow: 1,
+        slidesToShow: slidesToShow,
         slidesToScroll: 1,
-        fade: true
+        centerMode: true,
+        centerPadding: '0px',
+        afterChange: (index) => {
+            setCurrentSlide(index + 1);
+        },
+        responsive: [
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 1,
+                    centerMode: true,
+                },
+            },
+        ],
     };
 
     return (
         <div className="slider-accordion">
             <Slider {...settings}>
                 {data.map((item, index) => (
-                    <div key={index} className="card">
+                    <div key={index} className={`card ${((index === currentSlide) || (index === 0 && currentSlide === 3)) ? 'highlight' : ''}`}>
                         <img src={item.image_path} alt={item.name} />
-                        <h3>{item.name}</h3>
                     </div>
                 ))}
             </Slider>

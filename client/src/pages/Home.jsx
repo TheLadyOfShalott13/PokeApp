@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import "../styles/homepage.css";
 import Navbar from '../components/Navbar'
-import SliderAccordian from "../components/SliderAccordian";
 import axios from "axios";
 
 const Homepage = () => {
@@ -35,8 +34,15 @@ const Homepage = () => {
             <Navbar />
             <div className="Homepage">
                 <div className="table-container">
-                    {	responseRecieved ? data.length>0 ? <SliderAccordian data={data} setData={setData} />  : <h1 className="feedback-header">Cannot Find Image</h1> : <h1 className="feedback-header">Loading Image</h1> }
+                    <div className="grid-container">
+                        {data.map((item, index) => (
+                            <div key={index} className="grid-item">
+                                <img src={item.image_path} alt={item.name} /> {item.name}
+                            </div>
+                        ))}
+                    </div>
                 </div>
+
             </div>
         </div>
     )
