@@ -69,28 +69,47 @@ export const fetchPokemonSpeciesInfo = async (pokemon_species_url) => {
 };
 
 export const savePokemonData = async (data, transaction) => {
-    await Pokemon.upsert(data, { transaction });
+    const result = await Pokemon.upsert(data, { transaction });
+    //console.log(result);
 };
 
+export const insertPokemonData = async (pokemon_list) => {
+    const t = await sequelize.transaction();                     // Use a transaction to ensure data integrity
+    try {
+        for (const pokemon_item of pokemon_list) {                     // Loop through poketypes and insert/update if exists into database
+            let dataToSave = await getPokemonData(pokemon_item.name);  // Fetch each pokemon's data
+            await savePokemonData(dataToSave,t)
+            console.log(pokemon_item.name + ' processed successfully.');
+        }
+        await t.commit();
+        console.log('Pokemon saved successfully.');
+    } catch (error) {
+        await t.rollback();
+        throw error;
+    }
+}
+
+
+export const saveSinglePokemonFromApi = async(pokemon) => {
+    try {
+        const pokemon_list = await fetchPokemonInfo(pokemon);                   //fetch pokemon details
+        await insertPokemonData([pokemon_list]);
+        return await Pokemon.findAll({ attributes: ['id','slug', 'pokechain_id'] , where: { slug: pokemon } });
+    } catch (error) {
+        if (error.code === 'ECONNABORTED') {
+            console.error('Request timed out:', error.message);
+        } else {
+            console.error('Error fetching Pokemon:', error.message);
+        }
+    }
+}
 
 export const savePokemonListFromApi = async() => {
     try {
         const limit = 150
         const pokemon_list = await fetchPokemonList(limit);          //fetch list of pokemon
 
-        const t = await sequelize.transaction();                     // Use a transaction to ensure data integrity
-        try {
-            for (const pokemon_item of pokemon_list) {                     // Loop through poketypes and insert/update if exists into database
-                let dataToSave = await getPokemonData(pokemon_item.name);  // Fetch each pokemon's data
-                await savePokemonData(dataToSave,t)
-                console.log(pokemon_item.name + ' processed successfully.');
-            }
-            await t.commit();
-            console.log('Pokemon saved successfully.');
-        } catch (error) {
-            await t.rollback();
-            throw error;
-        }
+        await insertPokemonData(pokemon_list);
     } catch (error) {
         if (error.code === 'ECONNABORTED') {
             console.error('Request timed out:', error.message);
@@ -104,6 +123,7 @@ export const savePokemonListFromApi = async() => {
 //================= Return pokemon data to be saved =======================//
 export const getPokemonData = async(pokemon) => {
     const getPokemonTypesUrl = base_url + api_url['TYPES'];
+    const getPokemonEvolutionUrl = base_url + api_url['EVOLUTION'];
     const getPokemonSpeciesUrl = base_url + api_url['SPECIES'];
     const pokeInfo = await fetchPokemonInfo(pokemon)
     const pokeSpecies = await fetchPokemonSpeciesInfo(pokeInfo.species.url)
@@ -113,8 +133,8 @@ export const getPokemonData = async(pokemon) => {
     data.identifier     = pokeInfo.id;
     data.slug           = pokeInfo.name;
     data.image_path     = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/" + pokeInfo.id + ".png";
-    data.pokespecies_id = pokeInfo.species.url.replace(getPokemonSpeciesUrl, "").match(/\d+/)[0];
-    data.pokechain_id   = pokeSpecies.evolution_chain.url.replace(getPokemonSpeciesUrl, "").match(/\d+/)[0];
+    data.pokespecies_id = parseInt(pokeInfo.species.url.replace(getPokemonSpeciesUrl, "").match(/\d+/)[0],10);
+    data.pokechain_id   = parseInt(pokeSpecies.evolution_chain.url.replace(getPokemonEvolutionUrl, "").match(/\d+/)[0],10);
     data.poketypes      = "";
 
     pokeInfo.types.forEach(poketype => {
@@ -123,7 +143,6 @@ export const getPokemonData = async(pokemon) => {
     })
 
     data.poketypes = data.poketypes.slice(0, -1);
-
     return data;
 }
 
@@ -132,15 +151,19 @@ export const getPokemonData = async(pokemon) => {
 export const processEvolvedTo = async (evolution_chain_id, position, evolution_chain, pokemonIdentifierMap, t) => {
     for (const evolution of evolution_chain) {
         let dataToSave = {};
+        if (!pokemonIdentifierMap[evolution.species.name.trim()]){
+            const newPokemon = await saveSinglePokemonFromApi(evolution.species.name)
+            pokemonIdentifierMap[evolution.species.name] = newPokemon[0].dataValues.id
+        }
         dataToSave.pokechain_id     = evolution_chain_id;
         dataToSave.position         = position;
-        dataToSave.pokemon_id       = pokemonIdentifierMap[evolution.species.name];
+        dataToSave.pokemon_id       = pokemonIdentifierMap[evolution.species.name.trim()];
         dataToSave.ways             = evolution.evolution_details.length;     //count the number of ways one could evolve to this state
 
         await Pokevolution.upsert(dataToSave, { transaction: t });
         console.log(`${evolution.species.name} processed successfully.`);
         for (const evolution_type of evolution.evolves_to){             //evolves_to is an array object from the api and contains pokemon details
-            await processEvolvedTo(evolution_chain_id, position + 1, evolution_type, t);
+            await processEvolvedTo(evolution_chain_id, position + 1, [evolution_type], pokemonIdentifierMap, t);
         }
     }
 }
@@ -155,9 +178,9 @@ export const savePokemonEvolutionsFromApi = async () => {
         const pokemonEvolutionData  = await Pokemon.findAll({ attributes: ['id','slug', 'pokechain_id'] });
 
         //setting the id and values for both maps
-        pokemonEvolutionData.forEach(pokemon => {
-            pokemonIdentifierMap[pokemon.slug]  = pokemon.id;
-            pokemonEvolutionMap[pokemon.id]     = pokemon.pokechain_id;
+        pokemonEvolutionData.map(pokemon => {
+            pokemonIdentifierMap[pokemon.dataValues.slug]  = pokemon.dataValues.id;
+            pokemonEvolutionMap[pokemon.dataValues.id]     = pokemon.dataValues.pokechain_id;
         });
 
         const getPokemonEvolutionUrl = base_url + api_url['EVOLUTION'];     //initializing the base url of the evolution api url
@@ -173,7 +196,7 @@ export const savePokemonEvolutionsFromApi = async () => {
                 const t = await sequelize.transaction();                // Use a transaction to ensure data integrity
 
                 try {
-                    await processEvolvedTo(pokemon_evolution_id, position, pokemon_evolution.chain, pokemonIdentifierMap, t)
+                    await processEvolvedTo(pokemon_evolution_id, position, [pokemon_evolution.data.chain], pokemonIdentifierMap, t)
                     await t.commit();
                     console.log('Pokemon Evolutions saved successfully.');
                 } catch (error) {
