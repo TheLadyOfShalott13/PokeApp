@@ -80,14 +80,14 @@ const Homepage = () => {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                             <p style={{backgroundColor: "#85ff00"}}
-                               className="pokemon-type-label"
+                               className="pokemon-type-label search-filter"
                                key={-1}
                                onClick={(e) => setSearchTerm('')}
                             >
                                 #viewall
                             </p>
                             <p style={{backgroundColor: "#000000", color: "white"}}
-                               className="pokemon-type-label"
+                               className="pokemon-type-label search-filter"
                                key={0}
                                onClick={(e) => setSearchTerm('favorite')}
                             >
@@ -95,7 +95,7 @@ const Homepage = () => {
                             </p>
                             {types.map((item, index) => (
                                 <p style={{backgroundColor: item.colour}}
-                                   className="pokemon-type-label"
+                                   className="pokemon-type-label search-filter"
                                    key={index}
                                    onClick={(e) => setSearchTerm(item.name)}
                                 >

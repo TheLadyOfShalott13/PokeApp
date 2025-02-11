@@ -82,5 +82,8 @@ code {
   padding: 1px 5px;
   margin: 5px 5px 10px 5px;
   border-radius: 5px;
+}
+
+.search-filter {
   cursor: pointer;
 }
