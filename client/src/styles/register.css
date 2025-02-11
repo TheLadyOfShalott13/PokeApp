@@ -6,7 +6,7 @@ html {
 .registerCard {
     background-size: cover;
     background-repeat: no-repeat;
-    height: 1000px;
+    height: 100vh;
     overflow: hidden;
     position: relative;
 }
@@ -144,4 +144,10 @@ form .txt_field_img {
         width: 300px;
         margin: 0;
     }
+}
+
+#feedback-message{
+    font-size: 13px;
+    color: #b20c0c;
+    text-align: center;
 }

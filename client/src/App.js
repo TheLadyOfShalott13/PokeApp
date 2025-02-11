@@ -1,10 +1,10 @@
-import './App.css';
+import './styles/App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { useContext } from "react";
 import { AuthContext } from "./authContext";
 
 import Login from "./pages/Login";
-import Register from "./pages/Register";
+import RegisterUsers from "./pages/Register";
 import Homepage from "./pages/Home";
 import View from "./pages/View";
 
@@ -24,9 +24,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/"           element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
-          <Route path="/view/:id"           element={<ProtectedRoute><View /></ProtectedRoute>} />
+          <Route path="/view/:id"   element={<ProtectedRoute><View /></ProtectedRoute>} />
           <Route path="/login"      element={<Login />} />
-          <Route path="/register"   element={<Register />} />
+          <Route path="/register"   element={<RegisterUsers />} />
         </Routes>
       </BrowserRouter>
   );

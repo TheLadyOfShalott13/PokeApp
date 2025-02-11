@@ -1,34 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 import NavigationBar from "../components/NavigationBar";
 import "../styles/register.css";
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
-function Register() {
-    const api_url = process.env.REACT_APP_BACKEND_URL
-    const redirect_url = process.env.REACT_APP_FRONTEND_URL
-    const navigate = useNavigate();
-    const [info, setInfo] = useState({});
-    const handleChange = (e) => {
-        setInfo(
-            (prev) => ({ ...prev, [e.target.id]: e.target.value }));
+function RegisterUsers() {
+    const api_url                                    = process.env.REACT_APP_BACKEND_URL
+    const redirect_url                               = process.env.REACT_APP_FRONTEND_URL
+    const navigate                          = useNavigate();
+    const [info, setInfo]                               = useState({});
+    const [feedbackMessage, setFeedbackMessage]      = useState('');
+
+    const handleChange = (e) => {                                                   //realtime updating of form values into variable "info"
+        setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
     }; 
 
-    const handleClick = async (e) => {
+    const register = async (e) => {                                         // async function posting to register user
         e.preventDefault();
-
         try {
             await axios.post(
                 `${api_url}/api/user/register`,
-                info, { withcredentials: false })
-
+                info,
+                { withcredentials: false }
+            )
             navigate(`/login`);
         } catch (err) {
-            console.log(err)
+            setFeedbackMessage(err.response.data.message);
         }
-
     };
     return (
         <div className="register">
@@ -68,9 +66,10 @@ function Register() {
                                     required />
                             </div>
                         </div>
+                        <div className="formInput" id="feedback-message"><p>{feedbackMessage}</p></div>
                         <div className="login_button">
                             <button className="button" 
-                                    onClick={handleClick}>
+                                    onClick={register}>
                                 Register
                             </button>
                         </div>
@@ -88,4 +87,4 @@ function Register() {
     );
 }
 
-export default Register;
+export default RegisterUsers;
