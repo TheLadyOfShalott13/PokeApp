@@ -8,6 +8,7 @@ This project is used to demonstrate an example of a custom stack combining MySQL
 - [Running The Project](#running-the-project)
 - [Product Features](#product-features)
 - [Use Cases](#use-cases)
+- [Possible Improvements](#possible-improvements)
 - [Dependencies](#dependencies)
 - [License](#license)
 - [Authors](#authors)
@@ -76,6 +77,12 @@ These are the key functionalities of our application that make it unique and use
 - Users can add or remove Pokémons from their favorites list on a click of a button. Updates are persisted without reloading the page.
 - Users can view all poketypes and choose to filter by selected poketype
 
+## Possible Improvements
+- **Redis caching** could be really useful here. Application performance can be improved by saving the most commonly persisted data such as poketypes and favorites into redis. The controller function on the backend side can be modified to check if they are present in the cache before performing a fetch from the database.
+- **Rate limiting** should be implemented on the APIs on the backend. This will help to ensure that a service remains available and responsive by preventing excessive or abusive traffic.
+- **Pagination** can be implemented to further optimize the DB and cache performance by reducing the window of rows returned.
+- **Authentication** on every request made to the backend using JWT or 0Auth or Bearer Token should be implemented to secure sensitive data.
+- **Proxy server** should be set up to exercise access control. Cloudflare could be implemented for better control of incoming traffic and protection against DDoS attacks.
 
 ## Dependencies
 ### Backend
