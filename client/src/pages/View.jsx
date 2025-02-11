@@ -205,9 +205,11 @@ const View = () => {
                                                 <Row className="g-4 justify-content-center mb-5" key={index}>
                                                     <Col md={12} className="justify-content-center">
                                                         <h3 className="text-center pokemon-font-outline" style={{ color: "black" }}>STAGE {position}</h3>
+                                                        <Row className="g-4 justify-content-center mb-5" key={index}>
                                                         {
                                                             //iterating through the pokemon evolutions per position
                                                             evolutions[position].map((evolution, eindex) => (
+                                                                <Col md={4} className="justify-content-center">
                                                                     <Card className={`evolution-card mx-auto text-center ${evolution.pokemon_id === parseInt(id, 10) ? 'highlight-card' : 'hover-card'}`} key={eindex}>
                                                                         <a href={`${redirect_url}/view/${evolution.pokemon_id}`} className="text-decoration-none">
                                                                             <Card.Img src={evolution.Pokemon.image_path} alt={evolution.Pokemon.name} className="card-image"  />
@@ -227,8 +229,10 @@ const View = () => {
                                                                             </Card.Body>
                                                                         </a>
                                                                     </Card>
+                                                                </Col>
                                                             ))
                                                         }
+                                                        </Row>
                                                     </Col>
                                                 </Row>
                                             ))
