@@ -48,12 +48,12 @@ code {
 
 @font-face {
   font-family: 'PokemonFontOutline';
-  src: url('./fonts/Pokemon-Hollow.ttf') format('truetype');
+  src: url('../fonts/Pokemon-Hollow.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'PokemonFontSolid';
-  src: url('./fonts/Pokemon-Solid.ttf') format('truetype');
+  src: url('../fonts/Pokemon-Solid.ttf') format('truetype');
 }
 
 .pokemon-font-outline {
@@ -101,4 +101,9 @@ code {
 .search-result-item:hover, .hover-card:hover{
   transform: scale(1.05);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.text-decoration-none{
+  text-decoration: none !important;
+  color: inherit !important;
 }
