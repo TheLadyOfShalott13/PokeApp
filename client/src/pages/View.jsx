@@ -97,18 +97,20 @@ const View = () => {
                                                         <h3 className="text-center pokemon-font-outline" style={{ color: "black" }}>STAGE {position}</h3>
                                                         {
                                                             evolutions[position].map((evolution, eindex) => (
-                                                                <Card className={`mx-auto text-center ${evolution.pokemon_id == id ? 'highlight-card' : ''}`}  style={{ width: '16rem', border: "solid 1px grey" }} key={eindex}>
-                                                                    <Card.Img src={evolution.Pokemon.image_path} alt={evolution.Pokemon.name} className="card-image"  />
-                                                                    <Card.Body>
-                                                                        <Card.Title>{evolution.Pokemon.name}</Card.Title>
-                                                                        <Card.Text>
-                                                                            {evolution.ways} possible condition(s) to achieve this evolution
-                                                                            {evolution.Pokemon.poketypes.split(",").map((poketype, index) => (
-                                                                                <span style={{backgroundColor: types[poketype].colour}} className="pokemon-type-label">#{types[poketype].name}</span>
-                                                                            ))}
-                                                                        </Card.Text>
-                                                                    </Card.Body>
-                                                                </Card>
+                                                                <a href={`${redirect_url}/view/${evolution.pokemon_id}`} className="text-decoration-none">
+                                                                    <Card className={`mx-auto text-center ${evolution.pokemon_id == id ? 'highlight-card' : 'hover-card'}`}  style={{ width: '16rem', border: "solid 1px grey" }} key={eindex}>
+                                                                        <Card.Img src={evolution.Pokemon.image_path} alt={evolution.Pokemon.name} className="card-image"  />
+                                                                        <Card.Body>
+                                                                            <Card.Title>{evolution.Pokemon.name}</Card.Title>
+                                                                            <Card.Text>
+                                                                                {evolution.ways} possible condition(s) to achieve this evolution<br></br>
+                                                                                {evolution.Pokemon.poketypes.split(",").map((poketype, index) => (
+                                                                                    <span style={{backgroundColor: types[poketype].colour}} className="pokemon-type-label">#{types[poketype].name}</span>
+                                                                                ))}
+                                                                            </Card.Text>
+                                                                        </Card.Body>
+                                                                    </Card>
+                                                                </a>
                                                             ))
                                                         }
                                                     </Col>

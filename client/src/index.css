@@ -94,7 +94,11 @@ code {
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
 }
 
-.highlight-card:hover {
+.search-result-item, .hover-card {
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.search-result-item:hover, .hover-card:hover{
   transform: scale(1.05);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
 }

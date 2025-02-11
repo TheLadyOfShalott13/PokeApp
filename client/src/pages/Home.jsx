@@ -107,26 +107,28 @@ const Homepage = () => {
                     <Row xs={2} md={4} className="g-4">
                         {filteredData.length > 0 ? (filteredData.map((item, index) => (
                             <Col md={3} key={index} >
-                                <Card className="card-center" style={{border: "solid 1px black"}}>
-                                    <Card.Img variant="top" src={item.image_path} alt={item.name} className="card-image" />
-                                    <Card.Body>
-                                        <Card.Title><h2 className="pokemon-font-solid">{item.name}</h2></Card.Title>
-                                        <Card.Text>
-                                            {item.type.map((type, tindex) => (
-                                                <span style={{backgroundColor: type.colour}} className="pokemon-type-label" key={tindex}>
-                                                    #{type.name}
-                                                </span>
-                                            ))}
-                                            {
-                                                favs.includes(item.id) ?
-                                                    <span style={{backgroundColor: "#000000", color: "white"}} className="pokemon-type-label" key={-1}>
-                                                        #favorite<span style={{color: "red"}}>&hearts;</span>
+                                <a href={`${redirect_url}/view/${item.id}`} className="text-decoration-none">
+                                    <Card className="card-center search-result-item" style={{border: "solid 1px black"}}>
+                                        <Card.Img variant="top" src={item.image_path} alt={item.name} className="card-image" />
+                                        <Card.Body>
+                                            <Card.Title><h2 className="pokemon-font-solid">{item.name}</h2></Card.Title>
+                                            <Card.Text>
+                                                {item.type.map((type, tindex) => (
+                                                    <span style={{backgroundColor: type.colour}} className="pokemon-type-label" key={tindex}>
+                                                        #{type.name}
                                                     </span>
-                                                : ''
-                                            }
-                                        </Card.Text>
-                                    </Card.Body>
-                                </Card>
+                                                ))}
+                                                {
+                                                    favs.includes(item.id) ?
+                                                        <span style={{backgroundColor: "#000000", color: "white"}} className="pokemon-type-label" key={-1}>
+                                                            #favorite<span style={{color: "red"}}>&hearts;</span>
+                                                        </span>
+                                                    : ''
+                                                }
+                                            </Card.Text>
+                                        </Card.Body>
+                                    </Card>
+                                </a>
                             </Col>
                         ))) :(
                             <Col md={12}>
