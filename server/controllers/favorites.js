@@ -30,10 +30,7 @@ export const deleteFavorite = async (req, res, next) => {
 export const getAllFavorites = async (req, res, next) => {
     try {
         const favorites = await Favorites.findAll({
-            where: { user_id: req.params.user_id },
-            include: [
-                { model: Pokemon, attributes: ['name','img'] } //TODO: Arbitary Values for now
-            ] });
+            where: { user_id: req.params.user_id }});
         res.status(200).json(favorites);
     } catch (err) {
         next(err)
