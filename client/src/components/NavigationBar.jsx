@@ -26,14 +26,10 @@ const NavigationBar = () => {
                     <Nav className="ms-auto">
                         {user ? (
                             <>
+
                                 <Nav.Item>
-                                    <Nav.Link as={Link} to={`/user/${user._id}`}>
-                                        <li onClick={handleClick} style={{ cursor: 'pointer' }}>
-                                            <p>Logout</p>
-                                        </li>
-                                        <li id="username">
-                                            <p>{user.username}</p>
-                                        </li>
+                                    <Nav.Link as={Link} to={`/user/${user._id}`} onClick={handleClick}>
+                                        Hi, {user.dataValues.name}! Logging out?
                                     </Nav.Link>
                                 </Nav.Item>
                             </>
