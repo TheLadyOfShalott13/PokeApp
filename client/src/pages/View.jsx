@@ -37,6 +37,7 @@ const View = () => {
                 setPokevolutionResponseStatus(true);
             }).catch((err) => {
                 setPokevolutionResponseStatus(true);
+                console.log(err);
             });
             console.log('Completed');
         };
@@ -52,6 +53,7 @@ const View = () => {
                 loadEvolutions(response.data[0].pokechain_id);
             }).catch((err) => {
                 setPokemonResponseStatus(true);
+                console.log(err);
             });
             console.log('Completed');
         };
@@ -214,7 +216,7 @@ const View = () => {
                                                                                     {evolution.ways} possible condition(s) to achieve this evolution<br></br>
                                                                                     {
                                                                                         //iterating through evolution stage pokemon's poketypes
-                                                                                        evolution.Pokemon.poketypes.split(",").map((poketype, index) => (
+                                                                                        evolution.Pokemon.poketypes.split(",").map((poketype) => (
                                                                                             <span style={{backgroundColor: types[poketype].colour}} className="pokemon-type-label">
                                                                                                 #{types[poketype].name}
                                                                                             </span>
