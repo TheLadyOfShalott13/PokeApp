@@ -208,7 +208,7 @@ const View = () => {
                                                         {
                                                             //iterating through the pokemon evolutions per position
                                                             evolutions[position].map((evolution, eindex) => (
-                                                                    <Card className={`evolution-card mx-auto text-center ${evolution.pokemon_id == id ? 'highlight-card' : 'hover-card'}`} key={eindex}>
+                                                                    <Card className={`evolution-card mx-auto text-center ${evolution.pokemon_id === parseInt(id, 10) ? 'highlight-card' : 'hover-card'}`} key={eindex}>
                                                                         <a href={`${redirect_url}/view/${evolution.pokemon_id}`} className="text-decoration-none">
                                                                             <Card.Img src={evolution.Pokemon.image_path} alt={evolution.Pokemon.name} className="card-image"  />
                                                                             <Card.Body>
