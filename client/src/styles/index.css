@@ -110,3 +110,23 @@ code {
   background-color: #000000;
   color: white
 }
+
+.pokemon-details-header{
+  color: black;
+  text-decoration: underline;
+}
+
+.selected-pokemon-card{
+  border: solid 4px black !important;
+  color: black
+}
+
+.evolution-card{
+  width: 16rem;
+  border: solid 1px grey
+}
+
+.pokemon-details-text {
+  font-size: 30px;
+  display: block;
+}

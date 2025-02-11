@@ -1,27 +1,50 @@
 import React, {useContext, useEffect, useState} from 'react'
 import {Container, Row, Col, Card, Button} from 'react-bootstrap';
-import NavigationBar from '../components/NavigationBar'
-import axios from "axios";
 import {useParams} from "react-router-dom";
+import NavigationBar from '../components/NavigationBar'
 import {AuthContext} from "../authContext";
-import {faHeart,faHeartPulse} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import axios from "axios";
+
 
 const View = () => {
 
-    const {id} = useParams();
-    const api_url = process.env.REACT_APP_BACKEND_URL
-    const redirect_url = process.env.REACT_APP_FRONTEND_URL
-    const [isFavorite, setFavoriteStatus] = useState(false);
-    const [PokemonResponseRecieved, setPokemonResponseStatus] = useState(false);
-    const [PoketypeResponseRecieved, setPoketypeResponseStatus] = useState(false);
-    const [PokevolutionResponseRecieved, setPokevolutionResponseStatus] = useState(false);
-    const [pokemon, setPokemon] = useState([]);
-    const [types, setTypes] = useState({});
-    const [evolutions, setEvolutions] = useState([]);
-    const { user } = useContext(AuthContext);
+
+    const {id}          = useParams();                                                                           //pokemon ID
+    const api_url       = process.env.REACT_APP_BACKEND_URL
+    const redirect_url  = process.env.REACT_APP_FRONTEND_URL
+    const { user }             = useContext(AuthContext);                                                               //logged in users details
+
+
+    const [isFavorite, setFavoriteStatus]                               = useState(false);            //boolean value to store if the selected pokemon is a user favorite or not
+    const [PokemonResponseRecieved, setPokemonResponseStatus]           = useState(false);            //boolean value to store if the pokemon details request was processed or not
+    const [PoketypeResponseRecieved, setPoketypeResponseStatus]         = useState(false);            //boolean value to store if the poketype list fetching was processed or not
+    const [PokevolutionResponseRecieved, setPokevolutionResponseStatus] = useState(false);            //boolean value to store if the selected pokemon's evolution chain details was processed or not
+    const [pokemon, setPokemon]                                           = useState([]);               //state variable to store selected pokemon details
+    const [evolutions, setEvolutions]                                     = useState([]);               //state variable to store evolution chain details
+    const [types, setTypes]                                                  = useState({});               //state variable to store associative array of pokemon types (key = poketype's ID)
+
 
     useEffect(() => {
+
+        /**
+         * Function to fetch evolution chain grouped by position
+         * @param chain_id (Selected Pokemon's evolution chain ID)
+         * @returns {Promise<void>}
+         */
+        const loadEvolutions = async (chain_id) => {
+            axios.get(`${api_url}/api/pokevolution/grouped/${chain_id}`).then((response) => {
+                setEvolutions(response.data);
+                setPokevolutionResponseStatus(true);
+            }).catch((err) => {
+                setPokevolutionResponseStatus(true);
+            });
+            console.log('Completed');
+        };
+
+        /**
+         * Function to fetch pokemon details
+         * @returns {Promise<void>}
+         */
         const loadPokemon = async () => {
             axios.get(`${api_url}/api/pokemon/get/${id}`).then((response) => {
                 setPokemon(response.data);
@@ -33,12 +56,14 @@ const View = () => {
             console.log('Completed');
         };
 
-        const loadPokemonTypes = async () => {                                                           //Loading pokemon types from API
+        /**
+         * Function to fetch poketypes from API
+         * @returns {Promise<void>}
+         */
+        const loadPokemonTypes = async () => {
             axios.get(`${api_url}/api/poketype/list`).then((response) => {
                 const typesData = {};
-                response.data.forEach(type => {
-                    typesData[type.id] = type;
-                });
+                response.data.forEach( type => typesData[type.id] = type );
                 setTypes(typesData);
                 setPoketypeResponseStatus(true);
             }).catch((err) => {
@@ -47,17 +72,10 @@ const View = () => {
             console.log('Completed');
         };
 
-
-        const loadEvolutions = async (chain_id) => {
-            axios.get(`${api_url}/api/pokevolution/grouped/${chain_id}`).then((response) => {
-                setEvolutions(response.data);
-                setPokevolutionResponseStatus(true);
-            }).catch((err) => {
-                setPokevolutionResponseStatus(true);
-            });
-            console.log('Completed');
-        };
-
+        /**
+         * Function to set boolean value on whether selected pokemon is a user favorite or not
+         * @returns {Promise<void>}
+         */
         const checkFavorite = async () => {
             try {
                 const response = await axios.post(
@@ -74,9 +92,16 @@ const View = () => {
         loadPokemon();
         loadPokemonTypes();
         checkFavorite();
+
     }, [id, api_url, user.dataValues.id]);
 
 
+    /**
+     * Function to favorite or unfavorite selected pokemon
+     * Dependency to state variable:- isFavorite
+     * @param pokemon_id
+     * @returns {Promise<boolean|{favorite_status: boolean}>}
+     */
     const setFavorite = async (pokemon_id) => {
         try {
             if (!isFavorite) {
@@ -115,34 +140,52 @@ const View = () => {
                         {pokemon.length > 0 ? (pokemon.map((item, index) => (
                             <React.Fragment key={index}>
                                 <Col md={4} className="justify-content-center" key="summary">
-                                    <h1 className="text-center mb-4" style={{color: "black", textDecoration: "underline"}}>Current Pokemon</h1>
-                                    <Card style={{border: "solid 4px black"}}>
+                                    <h1 className="text-center mb-4 pokemon-details-header">Current Pokemon</h1>
+                                    <Card className="selected-pokemon-card">
                                         <Card.Img src={item.image_path} alt={item.name} className="card-image"  />
                                         <Card.Body>
                                             <Card.Text>
-                                                <h3 className="text-left" style={{color: "black"}}><span className=" pokemon-font-outline">Name:</span> <span className=" pokemon-font-solid">{item.name}</span></h3>
-                                                <h3 className="text-left" style={{color: "black"}}><span className=" pokemon-font-outline">Poke-api ID:</span> {item.identifier}</h3>
-                                                <h3 className="text-left" style={{color: "black"}}><span className=" pokemon-font-outline">Evolution Chain ID:</span> {item.pokechain_id}</h3>
-                                                <h3 className="text-left" style={{color: "black"}}><span className=" pokemon-font-outline">Pokemon Types:</span>
-                                                    {item.type.map((type, tindex) => (
-                                                        <span style={{backgroundColor: type.colour}} className="pokemon-type-label">#{type.name}</span>
-                                                    ))}
+                                                <span className="pokemon-details-text text-left">
+                                                    <span className="pokemon-font-outline">Name:</span>
+                                                    <span className="pokemon-font-solid">{item.name}</span>
+                                                </span>
+                                                <span className="pokemon-details-text text-left">
+                                                    <span className="pokemon-font-outline">Poke-api ID:</span>
+                                                    {item.identifier}
+                                                </span>
+                                                <span className="pokemon-details-text text-left">
+                                                    <span className="pokemon-font-outline">Evolution Chain ID:</span>
+                                                    {item.pokechain_id}
+                                                </span>
+                                                <span className="pokemon-details-text text-left">
+                                                    <span className="pokemon-font-outline">Pokemon Types:</span>
                                                     {
-                                                        isFavorite ?
+                                                        item.type.map((type) => (                                       //Iterating through the selected pokemon's poketypes and displaying them along with assigned colours
+                                                            <span style={{backgroundColor: type.colour}} className="pokemon-type-label">#{type.name}</span>
+                                                        ))
+                                                    }
+                                                    {
+                                                        isFavorite ?                                                    //Adding the label to indicate whether user favorite or not
                                                             (
-                                                                <span style={{backgroundColor: "#000000", color: "white"}} className="pokemon-type-label" key={-1}>
-                                                                    #favorite<span style={{color: "red"}}>&hearts;</span>
+                                                                <span className="pokemon-type-label favorites-label" key={-1}>
+                                                                    #favorite
+                                                                    <span style={{color: "red"}}>&hearts;</span>
                                                                 </span>
                                                             )
                                                             : ""
                                                     }
-                                                </h3>
+                                                </span>
                                             </Card.Text>
                                         </Card.Body>
                                         <Card.Footer >
                                             {
-                                                isFavorite ? (<Button variant="dark" size="lg" onClick={() => setFavorite(item.id)}>Remove from favorites</Button>)
-                                                    : (<Button variant="dark" size="lg" onClick={() => setFavorite(item.id)}>Add to favorites</Button>)
+                                                isFavorite ?                                                            // Favorite/unFavorite action button
+                                                    (
+                                                        <Button variant="dark" size="lg" onClick={() => setFavorite(item.id)}>Remove from favorites</Button>
+                                                    )
+                                                    : (
+                                                        <Button variant="dark" size="lg" onClick={() => setFavorite(item.id)}>Add to favorites</Button>
+                                                    )
                                             }
                                         </Card.Footer>
                                     </Card>
@@ -150,7 +193,7 @@ const View = () => {
                                 <Col md={8} className="justify-content-center" key="evolutions">
                                     <Row className="g-4 mb-4">
                                         <Col md={12}>
-                                            <h1 className="text-center" style={{color: "black", textDecoration: "underline"}}>Evolution Chart</h1>
+                                            <h1 className="text-center pokemon-details-header">Evolution Chart</h1>
                                         </Col>
                                     </Row>
                                     {
@@ -160,17 +203,23 @@ const View = () => {
                                                     <Col md={12} className="justify-content-center">
                                                         <h3 className="text-center pokemon-font-outline" style={{ color: "black" }}>STAGE {position}</h3>
                                                         {
+                                                            //iterating through the pokemon evolutions per position
                                                             evolutions[position].map((evolution, eindex) => (
-                                                                    <Card className={`mx-auto text-center ${evolution.pokemon_id == id ? 'highlight-card' : 'hover-card'}`}  style={{ width: '16rem', border: "solid 1px grey" }} key={eindex}>
+                                                                    <Card className={`evolution-card mx-auto text-center ${evolution.pokemon_id == id ? 'highlight-card' : 'hover-card'}`} key={eindex}>
                                                                         <a href={`${redirect_url}/view/${evolution.pokemon_id}`} className="text-decoration-none">
                                                                             <Card.Img src={evolution.Pokemon.image_path} alt={evolution.Pokemon.name} className="card-image"  />
                                                                             <Card.Body>
                                                                                 <Card.Title>{evolution.Pokemon.name}</Card.Title>
                                                                                 <Card.Text>
                                                                                     {evolution.ways} possible condition(s) to achieve this evolution<br></br>
-                                                                                    {evolution.Pokemon.poketypes.split(",").map((poketype, index) => (
-                                                                                        <span style={{backgroundColor: types[poketype].colour}} className="pokemon-type-label">#{types[poketype].name}</span>
-                                                                                    ))}
+                                                                                    {
+                                                                                        //iterating through evolution stage pokemon's poketypes
+                                                                                        evolution.Pokemon.poketypes.split(",").map((poketype, index) => (
+                                                                                            <span style={{backgroundColor: types[poketype].colour}} className="pokemon-type-label">
+                                                                                                #{types[poketype].name}
+                                                                                            </span>
+                                                                                        ))
+                                                                                    }
                                                                                 </Card.Text>
                                                                             </Card.Body>
                                                                         </a>
