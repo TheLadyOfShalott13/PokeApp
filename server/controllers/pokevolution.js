@@ -34,18 +34,36 @@ export const getOnePokevolution = async (req, res, next) => {
         const onePokevolution = await Pokevolution.findAll({
             where: { pokechain_id: chain_id },
             include: [
-                { model: Pokemon, attributes: ['id','name','image_path'] }
+                { model: Pokemon, attributes: ['id','name','image_path','poketypes'] }
             ]
         });
 
-        const modifiedPokevolution = onePokevolution.map(row => ({
-            ...row.get({ plain: true }), // Spread all properties of the original object
-            pokemon_id: row.Pokemon.id,
-            pokemon_name: row.Pokemon.name,
-            pokemon_image_path: row.Pokemon.image_path
-        }));
+        res.status(200).json(onePokevolution);
+    } catch (err) {
+        next(err)
+    }
+}
 
-        res.status(200).json(modifiedPokevolution);
+
+//================= Get One pokemon evolution chain =======================//
+export const getGroupedByPosition = async (req, res, next) => {
+    try {
+        const chain_id = req.params.id; //get the chain ID and subsequently all the evolutions of that chain ID
+        const onePokevolution = await Pokevolution.findAll({
+            where: { pokechain_id: chain_id },
+            include: [
+                { model: Pokemon, attributes: ['id','name','image_path','poketypes'] }
+            ]
+        });
+        let result = {};
+        onePokevolution.map(evolution => {
+            if (!result[evolution.position]) {
+                result[evolution.position] = [];
+            }
+            result[evolution.position].push(evolution);
+        })
+
+        res.status(200).json(result);
     } catch (err) {
         next(err)
     }

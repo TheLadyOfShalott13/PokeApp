@@ -4,13 +4,15 @@ import {
     getOnePokevolution,
     addPokevolution,
     updatePokevolution,
-    deletePokevolution
+    deletePokevolution,
+    getGroupedByPosition
 } from "../controllers/pokevolution.js";
 
 const router = express.Router();
 
 router.get("/list", getAllPokevolutions);
-router.get("/get/:chain_id", getOnePokevolution);
+router.get("/get/:id", getOnePokevolution);
+router.get("/grouped/:id", getGroupedByPosition);
 router.post("/add", addPokevolution);
 router.patch("/edit/:id", updatePokevolution);
 router.delete("/delete/:id", deletePokevolution);
