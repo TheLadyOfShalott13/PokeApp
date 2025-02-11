@@ -70,7 +70,7 @@ const Homepage = () => {
             <NavigationBar />
             <div className="main-body">
                 <Container>
-                    <Row xs={2} md={4} className="g-4 justify-content-center ">
+                    <Row className="g-4 justify-content-center ">
                         <Col md={6}>
                             <h1 className="text-center">View All Pokemon</h1>
                             <Form.Control
@@ -104,37 +104,55 @@ const Homepage = () => {
                             ))}
                         </Col>
                     </Row>
-                    <Row xs={2} md={4} className="g-4">
-                        {filteredData.length > 0 ? (filteredData.map((item, index) => (
-                            <Col md={3} key={index} >
-                                <a href={`${redirect_url}/view/${item.id}`} className="text-decoration-none">
-                                    <Card className="card-center search-result-item" style={{border: "solid 1px black"}}>
-                                        <Card.Img variant="top" src={item.image_path} alt={item.name} className="card-image" />
-                                        <Card.Body>
-                                            <Card.Title><h2 className="pokemon-font-solid">{item.name}</h2></Card.Title>
-                                            <Card.Text>
-                                                {item.type.map((type, tindex) => (
-                                                    <span style={{backgroundColor: type.colour}} className="pokemon-type-label" key={tindex}>
-                                                        #{type.name}
-                                                    </span>
-                                                ))}
-                                                {
-                                                    favs.includes(item.id) ?
-                                                        <span style={{backgroundColor: "#000000", color: "white"}} className="pokemon-type-label" key={-1}>
-                                                            #favorite<span style={{color: "red"}}>&hearts;</span>
-                                                        </span>
-                                                    : ''
-                                                }
-                                            </Card.Text>
-                                        </Card.Body>
-                                    </Card>
-                                </a>
-                            </Col>
-                        ))) :(
-                            <Col md={12}>
-                                <h3 className="text-center" style={{color: "grey"}}>No Pokemon Found</h3>
-                            </Col>
-                        )}
+                    <Row className="g-4">
+                        {
+                            filteredData.length > 0 ?
+                                (
+                                    filteredData.map((item, index) => (                         //generate pokemon cards for all filtered data
+                                        <Col md={3} key={index} >
+                                            <a href={`${redirect_url}/view/${item.id}`} className="text-decoration-none">
+                                                <Card className="search-result-item">
+                                                    <Card.Img
+                                                        variant="top"
+                                                        src={item.image_path}
+                                                        alt={item.name}
+                                                        className="card-image"
+                                                    />
+                                                    <Card.Body>
+                                                        <Card.Title>
+                                                            <h2 className="pokemon-font-solid">
+                                                                {item.name}
+                                                            </h2>
+                                                        </Card.Title>
+                                                        <Card.Text>
+                                                            {
+                                                                item.type.map((type, tindex) => (                                    //iterating through pokemon's types and displaying them along with their assigned colours
+                                                                    <span style={{backgroundColor: type.colour}} className="pokemon-type-label" key={tindex}>
+                                                                        #{type.name}
+                                                                    </span>
+                                                                ))
+                                                            }
+                                                            {
+                                                                favs.includes(item.id) ?                                            //favorites label: if a pokemon is a user favorite, a special label is displayed
+                                                                    <span className="pokemon-type-label favorites-label" key={-1}>
+                                                                        #favorite
+                                                                        <span style={{color: "red"}}>&hearts;</span>
+                                                                    </span>
+                                                                : ''
+                                                            }
+                                                        </Card.Text>
+                                                    </Card.Body>
+                                                </Card>
+                                            </a>
+                                        </Col>
+                                    ))
+                                )
+                            :(                                                                                          //Loading this component incase pokemon table is empty
+                                <Col md={12}>
+                                    <h3 className="text-center" style={{color: "grey"}}>No Pokemon Found</h3>
+                                </Col>
+                            )
+                        }
                     </Row>
                 </Container>
             </div>
