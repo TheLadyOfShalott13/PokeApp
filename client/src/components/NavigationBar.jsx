@@ -26,7 +26,6 @@ const NavigationBar = () => {
                     <Nav className="ms-auto">
                         {user ? (
                             <>
-                                <Nav.Link as={Link} to="/favorites">Favorites</Nav.Link>
                                 <Nav.Item>
                                     <Nav.Link as={Link} to={`/user/${user._id}`}>
                                         <li onClick={handleClick} style={{ cursor: 'pointer' }}>
@@ -40,7 +39,6 @@ const NavigationBar = () => {
                             </>
                         ) : (
                             <>
-                                <Nav.Link as={Link} to="/login">Favorites</Nav.Link>
                                 <Nav.Link as={Link} to="/register">Register</Nav.Link>
                                 <Nav.Link as={Link} to="/login">Login</Nav.Link>
                             </>
