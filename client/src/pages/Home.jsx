@@ -1,20 +1,27 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {Container, Row, Col, Card, Form} from 'react-bootstrap';
 import NavigationBar from '../components/NavigationBar'
 import axios from "axios";
+import {AuthContext} from "../authContext";
 
 const Homepage = () => {
 
     const api_url = process.env.REACT_APP_BACKEND_URL
     const redirect_url = process.env.REACT_APP_FRONTEND_URL
-    const [PokemonResponseRecieved, setPokemonResponseStatus] = useState(false);
+
+    const [PokemonResponseRecieved, setPokemonResponseStatus] = useState(false);                    //included for checking if response from API was successful
     const [PoketypeResponseRecieved, setPoketypeResponseStatus] = useState(false);
-    const [data, setData] = useState([]);
+    const [FavoritesResponseRecieved, setFavoritesResponseStatus] = useState(false);
+
+    const [data, setData] = useState([]);                                                             //state variables for loading data from APIs
     const [types, setTypes] = useState([]);
+    const [favs, setFaves] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
+    const { user } = useContext(AuthContext);                                                                         //Loading user data from logged in session
+
     useEffect(() => {
-        const loadPokemon = async () => {
+        const loadPokemon = async () => {                                                                //Loading pokemon data from API
             axios.get(`${api_url}/api/pokemon/list`).then((response) => {
                 setData(response.data);
                 setPokemonResponseStatus(true);
@@ -24,7 +31,7 @@ const Homepage = () => {
             console.log('Completed');
         };
 
-        const loadPokemonTypes = async () => {
+        const loadPokemonTypes = async () => {                                                           //Loading pokemon types from API
             axios.get(`${api_url}/api/poketype/list`).then((response) => {
                 setTypes(response.data);
                 setPoketypeResponseStatus(true);
@@ -34,11 +41,26 @@ const Homepage = () => {
             console.log('Completed');
         };
 
+        const loadFavorites = async () => {                                                              //Loading user pokemon favorites from API
+            axios.get(`${api_url}/api/favorites/list/${user.dataValues.id}`).then((response) => {
+                let favorites = []
+                response.data.map(fav => favorites.push(fav.poke_id))
+                setFaves(favorites);
+                setFavoritesResponseStatus(true);
+            }).catch((err) => {
+                setFavoritesResponseStatus(true);
+            });
+        }
+
         loadPokemonTypes();
         loadPokemon();
+        loadFavorites();
     }, []);
 
-    const filteredData = data.filter(item =>
+
+    const filteredData = searchTerm.toLowerCase() === 'favorite'                                                // search filter logic
+        ? data.filter(item => favs.includes(item.id))                                                                 // if search term = favorite, then filter by favorite included pokemon IDs
+        : data.filter(item =>                                                                                         // else filter by specified name or type
         item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.type.some(type => type.name.toLowerCase().includes(searchTerm.toLowerCase()))
     );
@@ -57,15 +79,23 @@ const Homepage = () => {
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
+                            <p style={{backgroundColor: "#85ff00"}}
+                               className="pokemon-type-label"
+                               key={-1}
+                               onClick={(e) => setSearchTerm('')}
+                            >
+                                #viewall
+                            </p>
+                            <p style={{backgroundColor: "#000000", color: "white"}}
+                               className="pokemon-type-label"
+                               key={0}
+                               onClick={(e) => setSearchTerm('favorite')}
+                            >
+                                #favorite<span style={{color: "red"}}>&hearts;</span>
+                            </p>
                             {types.map((item, index) => (
-                                <p style={{
-                                        backgroundColor: item.colour,
-                                        display: "inline-block",
-                                        padding: "1px 5px",
-                                        margin: "5px 5px 10px 5px",
-                                        borderRadius: "5px",
-                                        cursor: "pointer",
-                                    }}
+                                <p style={{backgroundColor: item.colour}}
+                                   className="pokemon-type-label"
                                    key={index}
                                    onClick={(e) => setSearchTerm(item.name)}
                                 >
@@ -82,11 +112,18 @@ const Homepage = () => {
                                     <Card.Body>
                                         <Card.Title><h2 className="pokemon-font-solid">{item.name}</h2></Card.Title>
                                         <Card.Text>
-                                            {item.type.map((type, index) => (
-                                                <p style={{backgroundColor: type.colour, display: "inline-block", padding: "1px 5px", borderRadius: "5px"}} key={index}>
+                                            {item.type.map((type, tindex) => (
+                                                <span style={{backgroundColor: type.colour}} className="pokemon-type-label" key={tindex}>
                                                     #{type.name}
-                                                </p>
+                                                </span>
                                             ))}
+                                            {
+                                                favs.includes(item.id) ?
+                                                    <span style={{backgroundColor: "#000000", color: "white"}} className="pokemon-type-label" key={-1}>
+                                                        #favorite<span style={{color: "red"}}>&hearts;</span>
+                                                    </span>
+                                                : ''
+                                            }
                                         </Card.Text>
                                     </Card.Body>
                                 </Card>

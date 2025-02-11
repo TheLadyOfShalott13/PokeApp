@@ -76,3 +76,11 @@ code {
 .card-center {
   text-align: center;
 }
+
+.pokemon-type-label {
+  display: inline-block;
+  padding: 1px 5px;
+  margin: 5px 5px 10px 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
