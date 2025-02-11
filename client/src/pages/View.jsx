@@ -70,6 +70,7 @@ const View = () => {
                 setPoketypeResponseStatus(true);
             }).catch((err) => {
                 setPoketypeResponseStatus(true);
+                console.log(err);
             });
             console.log('Completed');
         };
