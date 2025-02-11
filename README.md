@@ -74,7 +74,6 @@ These are the key functionalities of our application that make it unique and use
 - Fetching data from the DB and display the first 150 Pokémon in a scrollable list. 
 - Clicking on a Pokémon displays its types and evolution options (if available).
 - Users can add or remove Pokémons from their favorites list on a click of a button. Updates are persisted without reloading the page.
-- Menus can be added and modified. Every menu item will be associated with a restaurant and a category.
 - Users can view all poketypes and choose to filter by selected poketype
 
 
