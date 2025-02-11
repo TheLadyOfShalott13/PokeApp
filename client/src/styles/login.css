@@ -34,8 +34,14 @@ html {
 
 form .txt_field {
     position: relative;
-    border-bottom: 2px solid #adadad;
+    border: 1px solid #adadad;
+    border-radius: 20px;
     margin: 30px 0;
+}
+
+form .txt_field_img {
+    position: relative;
+    margin-top: 10px;
 }
 
 .txt_field {
@@ -63,7 +69,7 @@ form .txt_field {
     height: 40px;
     font-size: 16px;
     border: none;
-    background: 'none';
+    background: none;
     outline: none;
     color: #545454;
 }
@@ -75,7 +81,7 @@ form .txt_field {
     background: transparent;
     border-radius: 25px;
     font-size: 18px;
-    color: black;
+    color: white;
     font-weight: 700;
     cursor: pointer;
     outline: none;
@@ -120,4 +126,10 @@ form .txt_field {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+#feedback-message{
+    font-size: 13px;
+    color: #b20c0c;
+    text-align: center;
 }

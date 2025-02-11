@@ -66,7 +66,9 @@ function RegisterUsers() {
                                     required />
                             </div>
                         </div>
-                        <div className="formInput" id="feedback-message"><p>{feedbackMessage}</p></div>
+                        <div className="formInput" id="feedback-message">
+                            <p>{feedbackMessage}</p>
+                        </div>
                         <div className="login_button">
                             <button className="button" 
                                     onClick={register}>
